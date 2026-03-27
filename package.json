@@ -1,0 +1,55 @@
+{
+  "name": "agent-exoskeleton",
+  "version": "0.1.0",
+  "description": "Lightweight, git-native standard for defining AI agents. Your repo is your agent.",
+  "type": "module",
+  "bin": {
+    "agent-exo": "./dist/cli.js"
+  },
+  "exports": {
+    ".": "./dist/loader.js",
+    "./adapters": "./dist/adapters/index.js",
+    "./adapters/*": "./dist/adapters/*.js",
+    "./validate": "./dist/validate.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "tsc --noEmit",
+    "test": "node --test dist/**/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist/",
+    "spec/",
+    "templates/"
+  ],
+  "keywords": [
+    "ai-agent",
+    "agent-definition",
+    "llm",
+    "claude",
+    "openai",
+    "git-native",
+    "agent-framework"
+  ],
+  "author": "AITFund",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AITFund/agent-exoskeleton.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}

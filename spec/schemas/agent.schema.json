@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/AITFund/agent-exoskeleton/main/spec/schemas/agent.schema.json",
+  "title": "Agent Exoskeleton Manifest",
+  "description": "Schema for agent.yaml — the agent definition manifest.",
+  "type": "object",
+  "required": ["spec_version", "name", "version", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Specification version this agent targets (semver)."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Agent display name."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Agent version (semver)."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "One-line description of what this agent does."
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "preferred": {
+          "type": "string",
+          "description": "Preferred model alias or vendor-specific ID."
+        },
+        "fallback": {
+          "type": "string",
+          "description": "Fallback model if preferred is unavailable."
+        },
+        "constraints": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "temperature": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "description": "Sampling temperature."
+            },
+            "max_tokens": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum output tokens."
+            }
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Skill directory names under skills/."
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Tool names (directory names under tools/ or well-known names)."
+    },
+    "agents": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["description"],
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "What this sub-agent does."
+          },
+          "delegation": {
+            "type": "string",
+            "enum": ["auto", "manual", "disabled"],
+            "default": "manual",
+            "description": "When the parent delegates to this sub-agent."
+          }
+        }
+      },
+      "description": "Sub-agent declarations. Keys are directory names under agents/."
+    },
+    "communication": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Channels this agent is designed for."
+        },
+        "formatting": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "bold": { "type": "string" },
+              "italic": { "type": "string" },
+              "headings": { "type": "boolean" },
+              "links": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "boolean" }
+                ]
+              },
+              "code_blocks": { "type": "boolean" },
+              "bullets": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "description": "Per-channel formatting rules."
+        }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["file-based", "database", "none"],
+          "description": "How the agent persists knowledge."
+        },
+        "auto_save": {
+          "type": "boolean",
+          "description": "Whether the agent should automatically persist learnings."
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "container": {
+          "type": "boolean",
+          "description": "Whether the agent expects to run in a sandbox/container."
+        },
+        "network": {
+          "type": "boolean",
+          "description": "Whether the agent needs network access."
+        },
+        "filesystem": {
+          "type": "string",
+          "enum": ["none", "read-only", "read-write"],
+          "description": "Filesystem access level."
+        },
+        "max_turns": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum conversation turns."
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "author": { "type": "string" },
+        "license": { "type": "string" },
+        "repository": { "type": "string", "format": "uri" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

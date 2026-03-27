@@ -1,0 +1,88 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/AITFund/agent-exoskeleton/main/spec/schemas/agent.schema.json
+spec_version: "0.1.0"
+
+name: "Major"
+version: "1.0.0"
+description: "Personal assistant and content manager — handles tasks, research, scheduling, and web browsing"
+
+model:
+  preferred: claude-sonnet
+  fallback: claude-haiku
+  constraints:
+    max_tokens: 16384
+
+skills:
+  - web-research
+  - browser-automation
+  - scheduling
+  - content-management
+
+tools:
+  - web_search
+  - web_fetch
+  - bash
+  - file_read
+  - file_write
+  - browser
+  - send_message
+  - schedule_task
+  - list_tasks
+  - pause_task
+  - resume_task
+  - cancel_task
+
+communication:
+  channels:
+    - whatsapp
+    - telegram
+    - slack
+    - discord
+  formatting:
+    whatsapp:
+      bold: "*text*"
+      italic: "_text_"
+      headings: false
+      links: false
+      code_blocks: true
+      bullets: "•"
+    telegram:
+      bold: "*text*"
+      italic: "_text_"
+      headings: false
+      links: false
+      code_blocks: true
+      bullets: "•"
+    slack:
+      bold: "*text*"
+      italic: "_text_"
+      headings: false
+      links: "<url|text>"
+      code_blocks: true
+      bullets: "•"
+    discord:
+      bold: "**text**"
+      italic: "*text*"
+      headings: true
+      links: "[text](url)"
+      code_blocks: true
+      bullets: "-"
+
+memory:
+  strategy: file-based
+  auto_save: true
+
+runtime:
+  container: true
+  network: true
+  filesystem: read-write
+  max_turns: 200
+
+metadata:
+  author: "AITFund"
+  license: "MIT"
+  repository: "https://github.com/AITFund/agent-exoskeleton"
+  tags:
+    - personal-assistant
+    - content-manager
+    - multi-channel
+    - nanoclaw

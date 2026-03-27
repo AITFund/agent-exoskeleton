@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/AITFund/agent-exoskeleton/main/spec/schemas/agent.schema.json
+spec_version: "0.1.0"
+
+name: "MyAgent"
+version: "1.0.0"
+description: "A helpful assistant"
+
+model:
+  preferred: claude-sonnet
+
+tools:
+  - web_search
+  - web_fetch
+  - bash
+  - file_read
+  - file_write
+
+memory:
+  strategy: file-based
+  auto_save: true
+
+runtime:
+  container: true
+  network: true
+  filesystem: read-write
