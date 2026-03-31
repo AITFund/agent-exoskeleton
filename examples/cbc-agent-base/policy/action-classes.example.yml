@@ -1,0 +1,22 @@
+version: 1
+description: Example action classification for CBC-style assistants
+
+classes:
+  lookup_public_info: { privileged: false, outbound: false }
+  lookup_private_info: { privileged: true, outbound: false }
+  disclose_private_info: { privileged: true, outbound: true }
+  send_email: { privileged: true, outbound: true }
+  send_message: { privileged: true, outbound: true }
+  calendar_read: { privileged: true, outbound: false }
+  calendar_write: { privileged: true, outbound: true }
+  external_api_read: { privileged: false, outbound: true }
+  external_api_write: { privileged: true, outbound: true }
+  automation_change: { privileged: true, diego_only: true, outbound: false }
+  security_change: { privileged: true, diego_only: true, outbound: false }
+  auth_secret_change: { privileged: true, diego_only: true, outbound: false }
+  system_config_change: { privileged: true, diego_only: true, outbound: false }
+  add_trusted_principal: { privileged: true, diego_only: true, outbound: false }
+  authorize_group: { privileged: true, diego_only: true, outbound: false }
+  public_post: { privileged: true, diego_only: true, outbound: true }
+  purchase_spend: { privileged: true, diego_only: true, outbound: true }
+  destructive_action: { privileged: true, diego_only: true, outbound: false }

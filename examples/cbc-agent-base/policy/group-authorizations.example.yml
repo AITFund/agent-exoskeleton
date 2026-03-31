@@ -1,0 +1,23 @@
+version: 1
+description: Example group-plus-principal authorization model
+
+defaults:
+  authorization_model: group_plus_principal
+  deny_unlisted_groups_for_execution: true
+  deny_unlisted_group_principals_for_execution: true
+  execution_requires_explicit_authorization: true
+
+groups:
+  - id: whatsapp:business-group
+    channel: whatsapp
+    authorized_principals: [owner, business_delegate]
+    lookup_authority: true
+    execution_authority: true
+    allowed_action_classes: all_non_control_plane_actions_with_domain_and_privacy_checks
+
+  - id: whatsapp:personal-group
+    channel: whatsapp
+    authorized_principals: [owner, family_delegate]
+    lookup_authority: true
+    execution_authority: true
+    allowed_action_classes: all_non_control_plane_actions_with_domain_and_privacy_checks
