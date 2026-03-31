@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/AITFund/agent-exoskeleton/main/spec/schemas/agent.schema.json
+spec_version: "0.1.0"
+
+name: "CBC Agent Base"
+version: "1.0.0"
+description: "Security-first multi-channel personal assistant and executive operator"
+
+model:
+  preferred: claude-sonnet
+  fallback: gpt-4o-mini
+  constraints:
+    max_tokens: 16384
+
+skills:
+  - authority-evaluation
+  - web-research
+  - outbound-safety
+
+tools:
+  - web_search
+  - web_fetch
+  - bash
+  - file_read
+  - file_write
+  - send_message
+  - send_email
+  - schedule_task
+
+communication:
+  channels:
+    - whatsapp
+    - telegram
+    - signal
+    - email
+  formatting:
+    whatsapp:
+      bold: "*text*"
+      italic: "_text_"
+      headings: false
+      links: false
+      bullets: "•"
+    telegram:
+      bold: "*text*"
+      italic: "_text_"
+      headings: false
+      links: false
+      bullets: "•"
+    signal:
+      bold: "*text*"
+      italic: "_text_"
+      headings: false
+      links: false
+      bullets: "•"
+
+memory:
+  strategy: file-based
+  auto_save: true
+
+runtime:
+  container: true
+  network: true
+  filesystem: read-write
+  max_turns: 200
+
+metadata:
+  author: "AITFund"
+  license: "MIT"
+  repository: "https://github.com/AITFund/agent-exoskeleton"
+  tags:
+    - personal-assistant
+    - executive-operator
+    - security-first
+    - multi-channel
+    - portable-policy

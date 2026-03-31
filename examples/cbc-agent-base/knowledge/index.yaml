@@ -1,0 +1,4 @@
+documents:
+  - path: authority-model-v1.md
+    always_load: true
+    description: Portable authority, recipient, and group-governance model for CBC-style agents

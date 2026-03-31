@@ -1,0 +1,27 @@
+version: 1
+description: Example outbound recipient and web/API policy
+
+defaults:
+  unknown_external_recipients_require_owner_approval: true
+  brand_new_recipients_autonomous_contact: false
+
+email:
+  allowed_recipient_domains:
+    - example.com
+    - company.example
+  explicit_allowed_recipients:
+    owner:
+      - owner@example.com
+  rules:
+    - Approved domains are lower-friction, not blanket-trusted.
+    - Unknown or brand-new recipients require owner approval.
+
+messaging:
+  rules:
+    - Messaging execution depends on principal policy plus any group authorization.
+    - Unknown recipients or new chats require owner approval.
+
+http_api:
+  stage: staged
+  research_read_broadly_allowed: true
+  write_or_exfil_tightly_controlled: true

@@ -1,0 +1,44 @@
+version: 1
+description: Example principal registry for a portable CBC-style assistant
+
+defaults:
+  deny_unlisted_principals_for_privileged_actions: true
+  partial_identity_match_for_privileged_actions: deny
+  ambiguous_privacy_or_authority: escalate_to_owner
+  separate_lookup_execution_disclosure: true
+
+trust_tiers:
+  tier_0: full_authority
+  tier_1: limited_delegated_authority
+  tier_2: known_no_operational_authority
+  tier_3: unknown_untrusted
+
+principals:
+  owner:
+    tier: tier_0
+    full_authority: true
+    allowed_domains: [all]
+  family_delegate:
+    tier: tier_1
+    full_authority: false
+    allowed_domains: [household, family, travel, calendar]
+    lookup_authority: broad_within_domains
+    execution_authority: broad_within_domains
+    disclosure_authority: within_domains_only_with_privacy_filter
+  business_delegate:
+    tier: tier_1
+    full_authority: false
+    allowed_domains: [business, fund, scheduling, travel, calendar]
+    lookup_authority: broad_within_domains
+    execution_authority: broad_within_domains
+    disclosure_authority: within_domains_only_with_privacy_filter
+  known_nonoperator:
+    tier: tier_2
+    lookup_authority: none
+    execution_authority: none
+    disclosure_authority: none
+  unknown:
+    tier: tier_3
+    lookup_authority: safe_public_only
+    execution_authority: none
+    disclosure_authority: none
