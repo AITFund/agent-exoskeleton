@@ -1,5 +1,5 @@
 import type { AgentDefinition } from '../loader.js';
-import { readOperatingFiles } from './operating-files.js';
+import { formatOperatingFileForPrompt } from './operating-files.js';
 
 /**
  * Hermes adapter.
@@ -48,18 +48,17 @@ export function exportHermes(agent: AgentDefinition): string {
     sections.push(lines.join('\n').trim());
   }
 
-  const operatingFiles = readOperatingFiles(agent.basePath);
-  if (operatingFiles.length > 0) {
+  if (agent.operatingFiles.length > 0) {
     const lines = [
       '## Operating Exoskeleton',
       '',
       'These public files define authority, connections, schedules, state, and verification contracts. They are not secrets.',
       '',
     ];
-    for (const file of operatingFiles) {
+    for (const file of agent.operatingFiles) {
       lines.push(`### ${file.path}`);
       lines.push('```');
-      lines.push(file.content.trim());
+      lines.push(formatOperatingFileForPrompt(file));
       lines.push('```');
       lines.push('');
     }
