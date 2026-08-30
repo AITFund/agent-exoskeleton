@@ -1,0 +1,89 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/AITFund/agent-exoskeleton/main/spec/schemas/agent.schema.json
+spec_version: "0.2.0"
+name: "Executive Operator Redacted"
+version: "1.0.0"
+description: "Redacted executive-operator agent shape with authority, workspace, and verification contracts"
+
+model:
+  preferred: gpt-4o
+  fallback: gpt-4o-mini
+  constraints:
+    max_tokens: 16384
+
+skills:
+  - workspace-operations
+
+tools:
+  - bash
+  - file_read
+  - file_write
+  - web_fetch
+  - send_message
+  - send_email
+
+communication:
+  channels:
+    - ambiguous
+    - slack
+    - email
+  activation:
+    ambiguous:
+      posture: direct_only
+      respond_when: [direct_mention, direct_assignment, direct_message]
+      ignore: [ambient_activity, visible_comments_not_addressed_to_agent, peer_agent_status_updates]
+    slack:
+      posture: direct_only
+      respond_when: [direct_mention, direct_message]
+      ignore: [ambient_channel_messages]
+    email:
+      posture: direct_only
+      respond_when: [direct_recipient, explicit_forwarded_task]
+      ignore: [cc_only_without_instruction]
+
+memory:
+  strategy: file-based
+  auto_save: true
+
+policy:
+  principals: policy/principals.example.yml
+  channels: policy/channels.example.yml
+  action_classes: policy/action-classes.example.yml
+  recipient_policy: policy/recipient-policy.example.yml
+  control_plane: policy/control-plane.example.yml
+
+connections:
+  - workspace
+
+ops:
+  schedules:
+    - ops/schedules/workspace-mentions.yaml
+  monitors:
+    - ops/monitors/workspace-mentions.yaml
+  state:
+    - ops/state/action-log.schema.json
+  runbooks:
+    - ops/runbooks/self-onboarding.md
+
+verification:
+  contracts:
+    - verification/contracts.yml
+  required_for:
+    document_create: [document_id, content_readback, permission_readback]
+    comment_reply: [comment_id, thread_readback]
+    mail_send: [message_id, sent_status_readback]
+    task_update: [task_id, status_readback]
+
+runtime:
+  container: true
+  network: true
+  filesystem: read-write
+  max_turns: 200
+
+metadata:
+  author: "AITFund"
+  license: "MIT"
+  repository: "https://github.com/AITFund/agent-exoskeleton"
+  tags:
+    - workspace-agent
+    - direct-mention-only
+    - operating-exoskeleton

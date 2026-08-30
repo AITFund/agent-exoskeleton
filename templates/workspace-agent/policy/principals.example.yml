@@ -1,0 +1,10 @@
+principals:
+  owner:
+    description: Primary human operator who may assign work and approve control-plane changes.
+    identifiers:
+      - workspace_user_id: "user_REPLACE_ME"
+      - email: "owner@example.com"
+  peer_agent:
+    description: Another workspace agent. May coordinate but cannot expand this agent's authority.
+    identifiers:
+      - workspace_user_id: "agent_REPLACE_ME"

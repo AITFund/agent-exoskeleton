@@ -146,6 +146,8 @@ Adapters transform agent definitions into runtime-specific formats.
 | `claude-code` | `CLAUDE.md` | Claude Code CLI, Claude Agent SDK, NanoClaw |
 | `openai` | System prompt | OpenAI Chat API, OpenAI Agents SDK |
 | `raw` | Concatenated Markdown | Any LLM, debugging, review |
+| `hermes` | Hermes-oriented system prompt | Hermes Agent, cron/action loops, toolset-aware operators |
+| `workspace-markdown` | Onboarding Markdown | Ambiguous, Notion, Google Docs, or other workspace docs |
 
 ```bash
 # Export examples
@@ -202,6 +204,31 @@ npx agent-exo export examples/major-content-manager --adapter claude-code
 
 # Validate it
 npx agent-exo validate examples/major-content-manager
+```
+
+
+## Operating Exoskeleton
+
+Production agents need more than identity and skills. Agent Exoskeleton now supports optional public operating shape:
+
+```text
+policy/          # authority, principals, action classes, recipient controls
+connections/     # required credential surfaces and redacted validation steps
+ops/             # schedules, monitors, state contracts, runbooks
+verification/    # read-back requirements for completed work
+```
+
+The key contract is: discovered activity is not the same as completed work. Agents should record action receipts that prove each direct request was acted, blocked, or explicitly no-op with a reason.
+
+Shared workspaces should also declare activation posture. For most executive operators the safe default is `direct_only`: respond only to direct mentions, assignments, DMs, or explicit owner instructions, not ambient visible activity.
+
+```yaml
+communication:
+  activation:
+    ambiguous:
+      posture: direct_only
+      respond_when: [direct_mention, direct_assignment, direct_message]
+      ignore: [ambient_activity, visible_comments_not_addressed_to_agent]
 ```
 
 ## Git-Native Workflow

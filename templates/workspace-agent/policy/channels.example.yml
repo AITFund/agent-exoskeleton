@@ -1,0 +1,11 @@
+channels:
+  ambiguous:
+    posture: direct_only
+    authorized_triggers:
+      - direct_mention
+      - direct_assignment
+      - direct_message
+    ignored_activity:
+      - ambient_doc_comments
+      - peer_agent_status_updates
+      - visible_but_unaddressed_channel_messages

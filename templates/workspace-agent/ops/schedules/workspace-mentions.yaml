@@ -1,0 +1,5 @@
+name: workspace-mentions
+schedule: every 2m
+deliver: local
+mode: agent_runner
+purpose: Poll direct workspace mentions, assignments, DMs, and unread addressed mail without spamming human channels.

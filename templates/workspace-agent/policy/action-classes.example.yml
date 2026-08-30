@@ -1,0 +1,15 @@
+action_classes:
+  lookup:
+    default: allow
+  draft:
+    default: allow
+  workspace_write:
+    default: allow_when_directly_addressed
+  external_send:
+    default: require_explicit_approval
+  publish_public:
+    default: require_explicit_approval
+  spend_or_commit:
+    default: require_explicit_approval
+  control_plane_change:
+    default: owner_only

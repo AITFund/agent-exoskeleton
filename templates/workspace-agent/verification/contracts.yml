@@ -1,0 +1,18 @@
+required_for:
+  document_create:
+    - document_id
+    - content_readback
+    - permission_readback
+  comment_reply:
+    - comment_id
+    - thread_readback
+  mail_send:
+    - message_id
+    - sent_status_readback
+  task_update:
+    - task_id
+    - status_readback
+  scheduled_monitor:
+    - schedule_id
+    - enabled_state_readback
+    - quiet_noop_tick

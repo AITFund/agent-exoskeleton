@@ -1,0 +1,7 @@
+control_plane:
+  owner_only:
+    - change_secrets
+    - change_policy
+    - change_automations
+    - add_trusted_principal
+    - change_runtime_config

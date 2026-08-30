@@ -13,16 +13,17 @@
     "./validate": "./dist/validate.js"
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "lint": "tsc --noEmit",
-    "test": "node --test dist/**/*.test.js",
+    "build": "node ./node_modules/typescript/lib/tsc.js",
+    "dev": "node ./node_modules/typescript/lib/tsc.js --watch",
+    "lint": "node ./node_modules/typescript/lib/tsc.js --noEmit",
+    "test": "node --test dist",
     "prepublishOnly": "npm run build"
   },
   "files": [
     "dist/",
     "spec/",
-    "templates/"
+    "templates/",
+    "examples/"
   ],
   "keywords": [
     "ai-agent",
@@ -43,13 +44,16 @@
     "node": ">=18"
   },
   "dependencies": {
-    "ajv": "^8.17.1",
+    "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.3.2"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.0.0",
     "typescript": "^5.7.0"
+  },
+  "overrides": {
+    "fast-uri": "^4.1.3"
   }
 }
