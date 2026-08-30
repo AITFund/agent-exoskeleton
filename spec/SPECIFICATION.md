@@ -50,6 +50,25 @@ workflows/              # Optional — Multi-step deterministic flows
 config/                 # Optional — Environment-specific overrides
   default.yaml
   {environment}.yaml
+
+policy/                 # Optional — Authority and safety policy
+  principals.yml
+  channels.yml
+  action-classes.yml
+  recipient-policy.yml
+  control-plane.yml
+
+connections/            # Optional — Credential and integration contracts
+  {service}.yaml
+
+ops/                    # Optional — Schedules, monitors, state, runbooks
+  schedules/{name}.yaml
+  monitors/{name}.yaml
+  state/{name}.schema.json
+  runbooks/{name}.md
+
+verification/           # Optional — Completion/read-back contracts
+  contracts.yml
 ```
 
 ---
@@ -206,6 +225,107 @@ Free-form Markdown defining the agent's identity. This is the "soul" of the agen
 - Be specific about domain expertise — vague identities produce vague behavior
 - Communication style directly affects output quality — be prescriptive
 - Keep under 500 lines — this is loaded into every conversation
+
+
+---
+
+## Operating Exoskeleton
+
+The core definition describes what an agent is. Production deployments also need public, redacted operating shape: what the agent may do, which integrations it needs, when it should wake up, how it records work, and what counts as done.
+
+These directories MUST NOT contain secrets or private principal data in public repos. Use placeholders and private overlays for deployment-specific identities, keys, group IDs, recipient allowlists, and sensitive sources.
+
+### Policy (`policy/`)
+
+Policy files describe authority. Recommended files:
+
+```text
+policy/principals.yml         # placeholder principal classes and verification methods
+policy/channels.yml           # channel posture and group/workspace authorization shape
+policy/action-classes.yml     # lookup, draft, write, send, publish, spend, delete, config
+policy/recipient-policy.yml   # outbound recipient controls and approval requirements
+policy/control-plane.yml      # who may change policy, secrets, automations, and config
+```
+
+Required semantics:
+
+- Verify principal identity. Do not trust channel membership alone.
+- Separate lookup authority, execution authority, and disclosure authority.
+- Deny unknown principals, groups, and privileged action classes by default.
+- Treat secrets, policy, automations, trusted principals, and runtime config as control-plane changes.
+- Require explicit approval for irreversible external sends, public posts, commitments, spending, destructive operations, and sensitive disclosure unless a private policy grants standing authority.
+
+### Connections (`connections/`)
+
+Connection files describe credential surfaces without storing credentials.
+
+```yaml
+name: workspace
+kind: workspace_api
+identity: agent_owned
+required_env:
+  - WORKSPACE_API_TOKEN
+secret_policy:
+  storage: outside_repo
+  log_redaction: required
+verification:
+  - description: verify authenticated agent identity
+    command: workspace-cli whoami --json
+    expect:
+      authenticated: true
+```
+
+### Operations (`ops/`)
+
+Operational files describe unattended loops and state contracts.
+
+```yaml
+name: workspace-mentions
+schedule: every 2m
+activation:
+  posture: direct_only
+  respond_when: [direct_mention, direct_assignment, direct_message]
+state:
+  seen: .state/seen.json
+  processed: .state/processed.jsonl
+  actions: .state/actions.jsonl
+  errors: .state/errors.jsonl
+```
+
+Important state semantics:
+
+- `seen` means discovered.
+- `processed` means evaluated.
+- `actions` proves acted, blocked, or no-op.
+- A seen or processed event without an action receipt MUST remain pending.
+- Self-authored follow-up activity may be suppressed only with an explicit no-op receipt.
+
+### Verification (`verification/`)
+
+Verification contracts define what counts as complete.
+
+```yaml
+required_for:
+  email_send: [message_id, sent_status_readback]
+  document_create: [document_id, content_readback, permission_readback]
+  task_update: [task_id, status_readback]
+  calendar_write: [event_id, readback_after_write]
+```
+
+Agents should not report completion until the configured read-back succeeds or a blocker is recorded.
+
+### Workspace activation posture
+
+Shared workspaces should avoid ambient overreach. Declare activation rules per channel:
+
+```yaml
+communication:
+  activation:
+    ambiguous:
+      posture: direct_only
+      respond_when: [direct_mention, direct_assignment, direct_message]
+      ignore: [ambient_activity, visible_comments_not_addressed_to_agent, peer_agent_status_updates]
+```
 
 ---
 

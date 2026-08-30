@@ -1,0 +1,8 @@
+recipient_policy:
+  workspace_owner:
+    allow: true
+  peer_agents:
+    allow: true
+  unknown_external_recipients:
+    allow: false
+    require: explicit_owner_approval

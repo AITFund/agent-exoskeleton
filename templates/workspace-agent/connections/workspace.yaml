@@ -1,0 +1,18 @@
+name: workspace
+kind: workspace_api
+identity: agent_owned
+required_env:
+  - WORKSPACE_API_TOKEN
+secret_policy:
+  storage: outside_repo
+  permissions: owner_read_write_only
+  log_redaction: required
+verification:
+  - description: Verify authenticated agent identity
+    command: workspace-cli whoami --json
+    expect:
+      authenticated: true
+  - description: Verify document create/read-back path
+    command: workspace-cli docs create --title "agent setup verification" --visibility restricted --json
+  - description: Verify permission read-back path
+    command: workspace-cli api GET /api/documents/{id}/permissions --json

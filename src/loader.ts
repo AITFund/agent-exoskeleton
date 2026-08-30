@@ -16,6 +16,12 @@ export interface SubAgentConfig {
   delegation?: 'auto' | 'manual' | 'disabled';
 }
 
+export interface ChannelActivationConfig {
+  posture?: 'ambient' | 'direct_only' | 'manual_only' | 'disabled';
+  respond_when?: string[];
+  ignore?: string[];
+}
+
 export interface FormattingConfig {
   bold?: string;
   italic?: string;
@@ -37,7 +43,12 @@ export interface AgentManifest {
   communication?: {
     channels?: string[];
     formatting?: Record<string, FormattingConfig>;
+    activation?: Record<string, ChannelActivationConfig>;
   };
+  policy?: Record<string, string | unknown>;
+  connections?: string[];
+  ops?: Record<string, string[] | unknown>;
+  verification?: Record<string, unknown>;
   memory?: {
     strategy?: 'file-based' | 'database' | 'none';
     auto_save?: boolean;

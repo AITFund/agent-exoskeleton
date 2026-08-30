@@ -1,0 +1,22 @@
+name: workspace-mentions
+activation:
+  posture: direct_only
+  respond_when:
+    - direct_mention
+    - direct_assignment
+    - direct_message
+    - direct_recipient
+  ignore:
+    - ambient_activity
+    - visible_comments_not_addressed_to_agent
+    - peer_agent_status_updates
+state:
+  seen: .state/workspace/seen.json
+  processed: .state/workspace/processed.jsonl
+  actions: .state/workspace/actions.jsonl
+  errors: .state/workspace/errors.jsonl
+semantics:
+  seen: discovered, not complete
+  processed: evaluated, not necessarily complete
+  actions: acted, blocked, or explicit no-op receipt
+  retry: re-emit direct events until an action receipt exists

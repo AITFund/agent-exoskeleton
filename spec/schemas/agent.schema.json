@@ -2,9 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://raw.githubusercontent.com/AITFund/agent-exoskeleton/main/spec/schemas/agent.schema.json",
   "title": "Agent Exoskeleton Manifest",
-  "description": "Schema for agent.yaml — the agent definition manifest.",
+  "description": "Schema for agent.yaml \u2014 the agent definition manifest.",
   "type": "object",
-  "required": ["spec_version", "name", "version", "description"],
+  "required": [
+    "spec_version",
+    "name",
+    "version",
+    "description"
+  ],
   "additionalProperties": false,
   "properties": {
     "spec_version": {
@@ -80,7 +85,9 @@
       "type": "object",
       "additionalProperties": {
         "type": "object",
-        "required": ["description"],
+        "required": [
+          "description"
+        ],
         "additionalProperties": false,
         "properties": {
           "description": {
@@ -89,7 +96,11 @@
           },
           "delegation": {
             "type": "string",
-            "enum": ["auto", "manual", "disabled"],
+            "enum": [
+              "auto",
+              "manual",
+              "disabled"
+            ],
             "default": "manual",
             "description": "When the parent delegates to this sub-agent."
           }
@@ -113,21 +124,68 @@
           "additionalProperties": {
             "type": "object",
             "properties": {
-              "bold": { "type": "string" },
-              "italic": { "type": "string" },
-              "headings": { "type": "boolean" },
+              "bold": {
+                "type": "string"
+              },
+              "italic": {
+                "type": "string"
+              },
+              "headings": {
+                "type": "boolean"
+              },
               "links": {
                 "oneOf": [
-                  { "type": "string" },
-                  { "type": "boolean" }
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "boolean"
+                  }
                 ]
               },
-              "code_blocks": { "type": "boolean" },
-              "bullets": { "type": "string" }
+              "code_blocks": {
+                "type": "boolean"
+              },
+              "bullets": {
+                "type": "string"
+              }
             },
             "additionalProperties": true
           },
           "description": "Per-channel formatting rules."
+        },
+        "activation": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "posture": {
+                "type": "string",
+                "enum": [
+                  "ambient",
+                  "direct_only",
+                  "manual_only",
+                  "disabled"
+                ]
+              },
+              "respond_when": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "ignore": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            }
+          },
+          "description": "Per-channel activation rules such as direct-mention-only posture for shared workspaces."
         }
       }
     },
@@ -137,7 +195,11 @@
       "properties": {
         "strategy": {
           "type": "string",
-          "enum": ["file-based", "database", "none"],
+          "enum": [
+            "file-based",
+            "database",
+            "none"
+          ],
           "description": "How the agent persists knowledge."
         },
         "auto_save": {
@@ -160,7 +222,11 @@
         },
         "filesystem": {
           "type": "string",
-          "enum": ["none", "read-only", "read-write"],
+          "enum": [
+            "none",
+            "read-only",
+            "read-write"
+          ],
           "description": "Filesystem access level."
         },
         "max_turns": {
@@ -174,14 +240,111 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "author": { "type": "string" },
-        "license": { "type": "string" },
-        "repository": { "type": "string", "format": "uri" },
+        "author": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string",
+          "format": "uri"
+        },
         "tags": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "principals": {
+          "type": "string"
+        },
+        "channels": {
+          "type": "string"
+        },
+        "action_classes": {
+          "type": "string"
+        },
+        "recipient_policy": {
+          "type": "string"
+        },
+        "control_plane": {
+          "type": "string"
+        }
+      },
+      "description": "Paths to authority, channel, action, recipient, and control-plane policy files."
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Connection definition names under connections/ without file extension."
+    },
+    "ops": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "schedules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "monitors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "state": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "runbooks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "description": "Operational definitions for unattended schedules, monitors, state contracts, and runbooks."
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "contracts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "required_for": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "description": "Verification contracts and read-back requirements for completed work."
     }
   }
 }
