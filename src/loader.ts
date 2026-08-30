@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import { readOperatingFiles, type OperatingFile } from './adapters/operating-files.js';
 
 export interface ModelConfig {
   preferred?: string;
@@ -9,11 +10,36 @@ export interface ModelConfig {
     temperature?: number;
     max_tokens?: number;
   };
+  cost_tier?: 'low' | 'medium' | 'high';
+  speed_tier?: 'fast' | 'balanced' | 'slow';
 }
+
+export interface MemorySurfaceConfig {
+  name: string;
+  kind: 'files' | 'database' | 'mcp' | 'service';
+  path?: string;
+  tool?: string;
+  holds?: string;
+  write_when?: string;
+  recall_before?: string[];
+  promote_to?: string;
+}
+
+export interface PeerConfig {
+  owns?: string[];
+  handoff?: string;
+}
+
 
 export interface SubAgentConfig {
   description: string;
   delegation?: 'auto' | 'manual' | 'disabled';
+}
+
+export interface ChannelConfig {
+  mode?: 'read-only' | 'read-write' | 'write-only' | 'disabled';
+  pacing?: Record<string, unknown>;
+  notes?: string;
 }
 
 export interface ChannelActivationConfig {
@@ -41,7 +67,7 @@ export interface AgentManifest {
   tools?: string[];
   agents?: Record<string, SubAgentConfig>;
   communication?: {
-    channels?: string[];
+    channels?: string[] | Record<string, ChannelConfig>;
     formatting?: Record<string, FormattingConfig>;
     activation?: Record<string, ChannelActivationConfig>;
   };
@@ -50,9 +76,13 @@ export interface AgentManifest {
   ops?: Record<string, string[] | unknown>;
   verification?: Record<string, unknown>;
   memory?: {
-    strategy?: 'file-based' | 'database' | 'none';
+    strategy?: 'file-based' | 'database' | 'mcp' | 'service' | 'none';
     auto_save?: boolean;
+    surfaces?: MemorySurfaceConfig[];
+    rules?: string[];
   };
+  peers?: Record<string, PeerConfig>;
+  lessons?: string[];
   runtime?: {
     container?: boolean;
     network?: boolean;
@@ -95,6 +125,7 @@ export interface AgentDefinition {
   skills: Skill[];
   knowledge: { entries: KnowledgeEntry[]; documents: Record<string, string> };
   memory: string | null;
+  operatingFiles: OperatingFile[];
   subAgents: Record<string, AgentDefinition>;
   basePath: string;
 }
@@ -187,6 +218,9 @@ export function loadAgent(agentDir: string): AgentDefinition {
   // Optional: memory/MEMORY.md
   const memory = readFileIfExists(path.join(absDir, 'memory', 'MEMORY.md'));
 
+  // Optional public operating layer
+  const operatingFiles = readOperatingFiles(absDir);
+
   // Optional: agents/ (recursive)
   const subAgents: Record<string, AgentDefinition> = {};
   if (manifest.agents) {
@@ -205,6 +239,7 @@ export function loadAgent(agentDir: string): AgentDefinition {
     skills,
     knowledge,
     memory,
+    operatingFiles,
     subAgents,
     basePath: absDir,
   };
