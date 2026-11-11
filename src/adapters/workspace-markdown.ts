@@ -1,5 +1,5 @@
 import type { AgentDefinition } from '../loader.js';
-import { readOperatingFiles } from './operating-files.js';
+import { formatOperatingFileForPrompt } from './operating-files.js';
 
 /** Export an onboarding-ready Markdown packet for a workspace doc. */
 export function exportWorkspaceMarkdown(agent: AgentDefinition): string {
@@ -34,10 +34,10 @@ export function exportWorkspaceMarkdown(agent: AgentDefinition): string {
   }
   lines.push('## Operating files');
   lines.push('');
-  for (const file of readOperatingFiles(agent.basePath)) {
+  for (const file of agent.operatingFiles) {
     lines.push(`### ${file.path}`);
     lines.push('```');
-    lines.push(file.content.trim());
+    lines.push(formatOperatingFileForPrompt(file));
     lines.push('```');
     lines.push('');
   }

@@ -62,7 +62,7 @@ Only `agent.yaml` and `IDENTITY.md` are required. Everything else is additive.
 ## agent.yaml
 
 ```yaml
-spec_version: "0.1.0"
+spec_version: "0.2.0"
 name: "MyAgent"
 version: "1.0.0"
 description: "What this agent does in one line"

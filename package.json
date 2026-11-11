@@ -1,6 +1,6 @@
 {
   "name": "agent-exoskeleton",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lightweight, git-native standard for defining AI agents. Your repo is your agent.",
   "type": "module",
   "bin": {
@@ -16,7 +16,7 @@
     "build": "node ./node_modules/typescript/lib/tsc.js",
     "dev": "node ./node_modules/typescript/lib/tsc.js --watch",
     "lint": "node ./node_modules/typescript/lib/tsc.js --noEmit",
-    "test": "node --test dist",
+    "test": "node --test dist/*.test.js",
     "prepublishOnly": "npm run build"
   },
   "files": [

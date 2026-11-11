@@ -140,8 +140,12 @@ function cmdInfo(): void {
   if (m.skills?.length) console.log(`Skills:      ${m.skills.join(', ')}`);
   if (m.tools?.length) console.log(`Tools:       ${m.tools.join(', ')}`);
   if (m.agents) console.log(`Sub-agents:  ${Object.keys(m.agents).join(', ')}`);
-  if (m.communication?.channels)
-    console.log(`Channels:    ${m.communication.channels.join(', ')}`);
+  if (m.communication?.channels) {
+    const channels = Array.isArray(m.communication.channels)
+      ? m.communication.channels
+      : Object.keys(m.communication.channels);
+    console.log(`Channels:    ${channels.join(', ')}`);
+  }
   if (m.metadata?.tags) console.log(`Tags:        ${m.metadata.tags.join(', ')}`);
 }
 

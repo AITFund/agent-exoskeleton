@@ -11,12 +11,12 @@ classes:
   calendar_write: { privileged: true, outbound: true }
   external_api_read: { privileged: false, outbound: true }
   external_api_write: { privileged: true, outbound: true }
-  automation_change: { privileged: true, diego_only: true, outbound: false }
-  security_change: { privileged: true, diego_only: true, outbound: false }
-  auth_secret_change: { privileged: true, diego_only: true, outbound: false }
-  system_config_change: { privileged: true, diego_only: true, outbound: false }
-  add_trusted_principal: { privileged: true, diego_only: true, outbound: false }
-  authorize_group: { privileged: true, diego_only: true, outbound: false }
-  public_post: { privileged: true, diego_only: true, outbound: true }
-  purchase_spend: { privileged: true, diego_only: true, outbound: true }
-  destructive_action: { privileged: true, diego_only: true, outbound: false }
+  automation_change: { privileged: true, outbound: false }
+  security_change: { privileged: true, outbound: false }
+  auth_secret_change: { privileged: true, outbound: false }
+  system_config_change: { privileged: true, outbound: false }
+  add_trusted_principal: { privileged: true, outbound: false }
+  authorize_group: { privileged: true, outbound: false }
+  public_post: { privileged: true, outbound: true }
+  purchase_spend: { privileged: true, outbound: true }
+  destructive_action: { privileged: true, outbound: false }

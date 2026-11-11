@@ -62,6 +62,24 @@
               "description": "Maximum output tokens."
             }
           }
+        },
+        "cost_tier": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "description": "Relative cost tier for model selection."
+        },
+        "speed_tier": {
+          "type": "string",
+          "enum": [
+            "fast",
+            "balanced",
+            "slow"
+          ],
+          "description": "Relative speed tier for model selection."
         }
       }
     },
@@ -113,11 +131,40 @@
       "additionalProperties": false,
       "properties": {
         "channels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Channels this agent is designed for."
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "read-only",
+                      "read-write",
+                      "write-only",
+                      "disabled"
+                    ]
+                  },
+                  "pacing": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "notes": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "description": "Channels this agent is designed for, either as names or named channel contracts with mode/pacing."
         },
         "formatting": {
           "type": "object",
@@ -198,6 +245,8 @@
           "enum": [
             "file-based",
             "database",
+            "mcp",
+            "service",
             "none"
           ],
           "description": "How the agent persists knowledge."
@@ -205,6 +254,60 @@
         "auto_save": {
           "type": "boolean",
           "description": "Whether the agent should automatically persist learnings."
+        },
+        "surfaces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "kind"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "files",
+                  "database",
+                  "mcp",
+                  "service"
+                ]
+              },
+              "path": {
+                "type": "string"
+              },
+              "tool": {
+                "type": "string"
+              },
+              "holds": {
+                "type": "string"
+              },
+              "write_when": {
+                "type": "string"
+              },
+              "recall_before": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "promote_to": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Named memory surfaces and routing rules."
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Global memory write/promotion rules."
         }
       }
     },
@@ -345,6 +448,38 @@
         }
       },
       "description": "Verification contracts and read-back requirements for completed work."
+    },
+    "peers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "owns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "handoff": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Peer agents and handoff boundaries."
+    },
+    "lessons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Lesson files under lessons/ to emit beside relevant tools/adapters."
+    }
+  },
+  "patternProperties": {
+    "^x_": {
+      "description": "Extension field reserved for experimental or vendor-specific data."
     }
   }
 }

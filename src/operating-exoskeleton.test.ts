@@ -44,3 +44,28 @@ test('workspace markdown adapter creates self-onboarding packet', () => {
   assert.match(out, /Ask for your agent API key/);
   assert.match(out, /direct_only/);
 });
+
+
+test('all primary runtime adapters emit operating files and activation posture', () => {
+  const agent = loadAgent('templates/workspace-agent');
+  for (const name of ['claude-code', 'openai', 'hermes'] as const) {
+    const adapter = getAdapter(name);
+    assert.ok(adapter, `${name} adapter registered`);
+    const out = adapter!(agent);
+    assert.match(out, /Operating Exoskeleton/, `${name} includes operating files`);
+    assert.match(out, /action-classes\.example\.yml/, `${name} includes action classes`);
+    assert.match(out, /direct_only/, `${name} includes activation posture`);
+    assert.match(out, /EXAMPLE-ONLY \/ INERT PLACEHOLDER/, `${name} marks examples inert`);
+  }
+});
+
+test('loader exposes operating files without adapter filesystem reacharound', () => {
+  const agent = loadAgent('templates/workspace-agent');
+  assert.ok(agent.operatingFiles.some((file) => file.path === 'ops/state/action-log.schema.json'));
+  assert.ok(agent.operatingFiles.some((file) => file.path === 'policy/action-classes.example.yml' && file.exampleOnly));
+});
+
+test('validate checks operating file references', () => {
+  const result = validate('templates/workspace-agent');
+  assert.equal(result.valid, true, result.errors.join('\n'));
+});

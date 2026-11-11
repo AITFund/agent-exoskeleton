@@ -1,4 +1,4 @@
-# Agent Exoskeleton Specification v0.1.0
+# Agent Exoskeleton Specification v0.2.0
 
 A lightweight, git-native standard for defining AI agents. Runtime-agnostic. Your repo is your agent.
 
@@ -81,7 +81,7 @@ The agent manifest. Declares identity, model preferences, capabilities, and runt
 
 ```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/AITFund/agent-exoskeleton/main/spec/schemas/agent.schema.json
-spec_version: "0.1.0"
+spec_version: "0.2.0"
 
 name: "Agent Name"
 version: "1.0.0"
