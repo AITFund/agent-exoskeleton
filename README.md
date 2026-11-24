@@ -1,4 +1,8 @@
+<p><a href="https://aitfund.ai"><img src="docs/assets/aitfund-favicon.svg" alt="AITFund" width="64" height="64"></a></p>
+
 # Agent Exoskeleton
+
+An [AITFund](https://aitfund.ai) project. [Official brand assets and guidelines](https://aitfund.ai/styles).
 
 Lightweight, git-native standard for defining AI agents. Runtime-agnostic. Your repo is your agent.
 
